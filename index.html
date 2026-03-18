@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selamat Idul Fitri</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+font-family:Segoe UI, sans-serif;
+background:linear-gradient(#000428,#004e92);
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+text-align:center;
+position:relative;
+}
+
+/* bintang multi-layer */
+.star{
+position:absolute;
+border-radius:50%;
+box-shadow:0 0 6px white,0 0 12px white;
+animation:twinkle infinite alternate;
+}
+.star.layer1{width:2px;height:2px;animation-duration:2s;opacity:0.3;}
+.star.layer2{width:3px;height:3px;animation-duration:1.5s;opacity:0.5;}
+.star.layer3{width:4px;height:4px;animation-duration:1s;opacity:0.7;}
+
+@keyframes twinkle{
+0%{opacity:0.2; transform:scale(0.7);}
+50%{opacity:1; transform:scale(1.2);}
+100%{opacity:0.3; transform:scale(1);}
+}
+
+/* awan */
+.cloud{
+position:absolute;
+width:300px;height:100px;
+background:rgba(255,255,255,0.15);
+border-radius:50%;
+filter:blur(25px);
+animation:moveClouds linear infinite;
+}
+.cloud.layer1{top:10%; left:-350px; animation-duration:100s;}
+.cloud.layer2{top:35%; left:-400px; animation-duration:150s;}
+.cloud.layer3{top:55%; left:-300px; animation-duration:120s;}
+
+@keyframes moveClouds{
+0%{transform:translateX(0);}
+100%{transform:translateX(150vw);}
+}
+
+/* bulan */
+.moon{
+position:absolute;
+top:60px;
+right:120px;
+width:120px;height:120px;
+background:white;
+border-radius:50%;
+box-shadow:0 0 40px white;
+}
+
+/* masjid */
+.mosque{
+position:absolute;
+bottom:0;
+width:100%;height:120px;
+background:black;
+clip-path:polygon(
+0% 100%,0% 70%,10% 70%,15% 50%,20% 70%,30% 70%,35% 45%,40% 70%,50% 70%,55% 50%,60% 70%,70% 70%,75% 45%,80% 70%,90% 70%,100% 70%,100% 100%
+);
+}
+
+/* ketupat */
+.ketupat{
+position:absolute;
+width:35px;height:35px;
+background:linear-gradient(45deg,#9be15d,#00e3ae);
+transform:rotate(45deg);
+animation:float 6s infinite ease-in-out;
+}
+@keyframes float{
+0%{transform:translateY(0) rotate(45deg);}
+50%{transform:translateY(-20px) rotate(45deg);}
+100%{transform:translateY(0) rotate(45deg);}
+}
+
+/* kartu */
+.card{
+background:rgba(255,255,255,0.12);
+padding:45px;
+border-radius:25px;
+backdrop-filter:blur(12px);
+box-shadow:0 0 40px rgba(0,0,0,0.4);
+transform:scale(1.2);
+transition:all 1s ease;
+}
+.card.show{transform:scale(1);}
+
+/* tombol */
+button{
+padding:14px 35px;
+font-size:18px;
+border:none;
+border-radius:30px;
+background:linear-gradient(45deg,#FFD700,#fff3a0);
+cursor:pointer;
+position:relative;
+overflow:hidden;
+animation:pulse 2s infinite;
+}
+@keyframes pulse{
+0%{box-shadow:0 0 10px gold;}
+50%{box-shadow:0 0 25px gold;}
+100%{box-shadow:0 0 10px gold;}
+}
+
+/* konten */
+#konten{display:none;margin-top:10px;}
+#pesan{margin-top:20px;line-height:1.7;font-size:18px;}
+
+/* teks glow */
+.glow-text{
+background:linear-gradient(90deg,#fff,#FFD700,#fff);
+background-size:200%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:shineText 3s linear infinite;
+text-shadow:0 0 5px white,0 0 10px gold,0 0 20px gold;
+}
+@keyframes shineText{0%{background-position:0%}100%{background-position:200%;}}
+
+/* kembang api */
+.firework{
+position:absolute;
+width:6px;height:6px;
+border-radius:50%;
+animation:explode 1.5s ease-out forwards;
+}
+@keyframes explode{
+0%{transform:scale(0);opacity:1;}
+100%{transform:scale(20);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- AUDIO ONLINE -->
+<audio id="bgSound" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946f06e0a4.mp3?filename=ramadan-background-124007.mp3" loop></audio>
+
+<audio id="boomSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c3c8a9bb6f.mp3?filename=firework-explosion-1-6959.mp3"></audio>
+
+<!-- awan -->
+<div class="cloud layer1"></div>
+<div class="cloud layer2"></div>
+<div class="cloud layer3"></div>
+
+<div class="moon"></div>
+<div class="mosque"></div>
+
+<div class="ketupat" style="left:10%;top:30%"></div>
+<div class="ketupat" style="left:85%;top:60%"></div>
+<div class="ketupat" style="left:25%;top:75%"></div>
+
+<div class="card" id="card">
+<button id="btn" onclick="bukaUcapan()">Buka Ucapan</button>
+
+<div id="konten">
+<h1 class="glow-text">🌙 Selamat Hari Raya</h1>
+<h2 class="glow-text">Idul Fitri 1447 H</h2>
+
+<div id="pesan" class="glow-text">
+✨ Taqabbalallahu minna wa minkum ✨<br><br>
+Semoga di hari yang suci ini kita kembali fitri,<br>
+dipenuhi kebahagiaan, keberkahan,<br>
+dan silaturahmi yang indah.
+</div>
+</div>
+</div>
+
+<script>
+function createStars(num, layer){
+for(let i=0;i<num;i++){
+let star=document.createElement("div");
+star.className="star layer"+layer;
+star.style.left=Math.random()*100+"%";
+star.style.top=Math.random()*100+"%";
+document.body.appendChild(star);
+}
+}
+createStars(50,1);
+createStars(30,2);
+createStars(20,3);
+
+function ledakanMeriah(){
+for(let i=0;i<25;i++){
+let fire=document.createElement("div");
+fire.className="firework";
+fire.style.left=Math.random()*100+"%";
+fire.style.top=Math.random()*80+"%";
+fire.style.background=`hsl(${Math.random()*360},100%,50%)`;
+document.body.appendChild(fire);
+}
+}
+
+function bukaUcapan(){
+document.getElementById("btn").style.display="none";
+document.getElementById("konten").style.display="block";
+document.getElementById("card").classList.add("show");
+
+/* mainkan suara */
+document.getElementById("bgSound").play();
+
+ledakanMeriah();
+}
+
+document.addEventListener("click", function(e){
+if(e.target.id==="btn") return;
+
+let boom=document.getElementById("boomSound");
+boom.currentTime=0;
+boom.play();
+
+for(let i=0;i<10;i++){
+let fire=document.createElement("div");
+fire.className="firework";
+fire.style.left=e.clientX+"px";
+fire.style.top=e.clientY+"px";
+fire.style.background=`hsl(${Math.random()*360},100%,50%)`;
+document.body.appendChild(fire);
+}
+});
+</script>
+
+</body>
+</html>
