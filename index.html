@@ -145,6 +145,21 @@ animation:explode 1.5s ease-out forwards;
 0%{transform:scale(0);opacity:1;}
 100%{transform:scale(20);opacity:0;}
 }
+/* keterangan klik */
+#hint{
+position:fixed;
+bottom:15px;
+right:15px;
+font-size:14px;
+padding:8px 12px;
+background:rgba(255,255,255,0.1);
+border-radius:12px;
+color:#fff;
+font-weight:bold;
+text-shadow:0 0 5px rgba(255,255,255,0.7);
+z-index:999;
+pointer-events:none;
+}
 </style>
 </head>
 <body>
@@ -180,6 +195,9 @@ dan silaturahmi yang indah.
 </div>
 </div>
 
+<!-- keterangan klik -->
+<div id="hint">Klik dimana saja!</div>
+
 <script>
 let audioStarted = false;
 function startAudio(){ 
@@ -214,7 +232,7 @@ document.body.appendChild(fire);
 
 /* tombol buka ucapan */
 function bukaUcapan(){
-startAudio(); // background langsung start
+startAudio();
 document.getElementById("btn").style.display="none";
 document.getElementById("konten").style.display="block";
 document.getElementById("card").classList.add("show");
