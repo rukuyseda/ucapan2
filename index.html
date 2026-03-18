@@ -31,13 +31,25 @@ body{
 @keyframes moveClouds{0%{transform:translateX(0);}100%{transform:translateX(150vw);}}
 
 /* bulan */
-.moon{position:absolute;top:60px;right:120px;width:120px;height:120px;background:white;border-radius:50%;box-shadow:0 0 40px white;}
-/* masjid */
-.mosque{position:absolute;bottom:0;width:100%;height:120px;background:black;clip-path:polygon(0% 100%,0% 70%,10% 70%,15% 50%,20% 70%,30% 70%,35% 45%,40% 70%,50% 70%,55% 50%,60% 70%,70% 70%,75% 45%,80% 70%,90% 70%,100% 70%,100% 100%);}
+.moon{position:absolute;top:60px;right:120px;width:120px;height:120px;background:white;border-radius:50%;box-shadow:0 0 40px white;z-index:1;}
+
+/* masjid (atap) */
+.mosque{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:120px;
+  background:black;
+  clip-path:polygon(0% 100%,0% 70%,10% 70%,15% 50%,20% 70%,30% 70%,35% 45%,40% 70%,50% 70%,55% 50%,60% 70%,70% 70%,75% 45%,80% 70%,90% 70%,100% 70%,100% 100%);
+  z-index:2;
+}
+
+/* ketupat */
 .ketupat{position:absolute;width:35px;height:35px;background:linear-gradient(45deg,#9be15d,#00e3ae);transform:rotate(45deg);animation:float 6s infinite ease-in-out;}
 @keyframes float{0%{transform:translateY(0) rotate(45deg);}50%{transform:translateY(-20px) rotate(45deg);}100%{transform:translateY(0) rotate(45deg);}}
 
-.card{background:rgba(255,255,255,0.12);padding:45px;border-radius:25px;backdrop-filter:blur(12px);box-shadow:0 0 40px rgba(0,0,0,0.4);transform:scale(1.2);transition:all 1s ease;}
+/* card */
+.card{background:rgba(255,255,255,0.12);padding:45px;border-radius:25px;backdrop-filter:blur(12px);box-shadow:0 0 40px rgba(0,0,0,0.4);transform:scale(1.2);transition:all 1s ease;z-index:5;}
 .card.show{transform:scale(1);}
 button{padding:14px 35px;font-size:18px;border:none;border-radius:30px;background:linear-gradient(45deg,#FFD700,#fff3a0);cursor:pointer;animation:pulse 2s infinite;}
 @keyframes pulse{0%{box-shadow:0 0 10px gold;}50%{box-shadow:0 0 25px gold;}100%{box-shadow:0 0 10px gold;}}
@@ -141,19 +153,23 @@ function ledakanMeriah(){
 }
 
 function bukaUcapan(){
-  // hide tombol & hint
-  document.getElementById("btn").style.display="none";
-  document.getElementById("hint").style.display="none";
-  document.getElementById("konten").style.display="block";
-  document.getElementById("card").classList.add("show");
-  document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
+  // unlock audioContext
+  audioCtx.resume().then(()=>{
+    // hide tombol & hint
+    document.getElementById("btn").style.display="none";
+    document.getElementById("hint").style.display="none";
+    document.getElementById("konten").style.display="block";
+    document.getElementById("card").classList.add("show");
 
-  // play bg music
-  if(!bgSource) bgSource = playAudio('bg',true);
+    document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
 
-  // kembang api
-  playAudio('boom');
-  ledakanMeriah();
+    // play bg music
+    if(!bgSource) bgSource = playAudio('bg',true);
+
+    // kembang api + suara boom
+    playAudio('boom');
+    ledakanMeriah();
+  });
 }
 
 // klik layar efek + suara tap
