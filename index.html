@@ -52,11 +52,31 @@ button{padding:14px 35px;font-size:18px;border:none;border-radius:30px;backgroun
 @keyframes shineText{0%{background-position:0%}100%{background-position:200%;}}
 .firework{position:absolute;width:6px;height:6px;border-radius:50%;animation:explode 1.5s ease-out forwards;}
 @keyframes explode{0%{transform:scale(0);opacity:1;}100%{transform:scale(20);opacity:0;}}
+
+/* hint klik */
+#hint{position:fixed;bottom:15px;right:15px;font-size:14px;padding:8px 12px;background:rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-weight:bold;text-shadow:0 0 5px rgba(255,255,255,0.7);z-index:999;pointer-events:none;}
 </style>
 </head>
 <body>
 
-<!-- card & konten -->
+<!-- audios -->
+<audio id="bgSound" src="bg.wav" preload="auto" loop></audio>
+<audio id="boomSound" src="boom.wav" preload="auto"></audio>
+<audio id="tapSound" src="tap.wav" preload="auto"></audio>
+
+<!-- awan -->
+<div class="cloud"></div>
+<div class="cloud"></div>
+<div class="cloud"></div>
+
+<div class="moon"></div>
+<div class="mosque"></div>
+
+<div class="ketupat" style="left:10%;top:30%"></div>
+<div class="ketupat" style="left:85%;top:60%"></div>
+<div class="ketupat" style="left:25%;top:75%"></div>
+
+<!-- card -->
 <div class="card" id="card">
 <button id="btn" onclick="bukaUcapan()">Buka Ucapan</button>
 <div id="konten">
@@ -71,28 +91,19 @@ dan silaturahmi yang indah.
 </div>
 </div>
 
-<!-- bintang -->
-<script>
-for(let i=0;i<100;i++){
-  let star=document.createElement("div");
-  star.className="star";
-  star.style.left=Math.random()*100+"%";
-  star.style.top=Math.random()*100+"%";
-  document.body.appendChild(star);
-}
-</script>
+<div id="hint">Klik dimana saja!</div>
 
 <script>
-// Web Audio API setup
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let audioBuffers = {};
+let bgSource = null;
 
-async function loadAudio(name, url){
+// load WAV ke memory
+async function loadAudio(name,url){
   const res = await fetch(url);
   const arrayBuffer = await res.arrayBuffer();
   audioBuffers[name] = await audioCtx.decodeAudioData(arrayBuffer);
 }
-
 function playAudio(name, loop=false){
   const source = audioCtx.createBufferSource();
   source.buffer = audioBuffers[name];
@@ -102,12 +113,21 @@ function playAudio(name, loop=false){
   return source;
 }
 
-// load semua audio WAV
+// load semua audio
 Promise.all([
   loadAudio('bg','bg.wav'),
   loadAudio('boom','boom.wav'),
   loadAudio('tap','tap.wav')
 ]).then(()=>console.log('Audio loaded'));
+
+/* bintang */
+for(let i=0;i<100;i++){
+  let star=document.createElement("div");
+  star.className="star";
+  star.style.left=Math.random()*100+"%";
+  star.style.top=Math.random()*100+"%";
+  document.body.appendChild(star);
+}
 
 function ledakanMeriah(){
   for(let i=0;i<30;i++){
@@ -120,20 +140,18 @@ function ledakanMeriah(){
   }
 }
 
-let bgSource;
 function bukaUcapan(){
-  // hide tombol
+  // hide tombol & hint
   document.getElementById("btn").style.display="none";
+  document.getElementById("hint").style.display="none";
   document.getElementById("konten").style.display="block";
   document.getElementById("card").classList.add("show");
   document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
 
   // play bg music
-  if(!bgSource){
-    bgSource = playAudio('bg', true);
-  }
+  if(!bgSource) bgSource = playAudio('bg',true);
 
-  // play kembang api
+  // kembang api
   playAudio('boom');
   ledakanMeriah();
 }
