@@ -149,9 +149,8 @@ animation:explode 1.5s ease-out forwards;
 </head>
 <body>
 
-<!-- 4 AUDIO dengan preload -->
+<!-- 3 AUDIO preload -->
 <audio id="bgSound" src="bg.mp3" preload="auto" loop></audio>
-<audio id="clickSound" src="click.mp3" preload="auto"></audio>
 <audio id="boomSound" src="boom.mp3" preload="auto"></audio>
 <audio id="tapSound" src="tap.mp3" preload="auto"></audio>
 
@@ -183,11 +182,11 @@ dan silaturahmi yang indah.
 
 <script>
 let audioStarted = false;
-function startAudio(){ // background play anti delay
+function startAudio(){ 
 if(!audioStarted){
 let bg = document.getElementById("bgSound");
 bg.volume = 0.4;
-bg.play().catch(()=>{}); // kalau browser block autoplay
+bg.play().catch(()=>{}); 
 audioStarted = true;
 }
 }
@@ -215,16 +214,13 @@ document.body.appendChild(fire);
 
 /* tombol buka ucapan */
 function bukaUcapan(){
-startAudio();
-/* suara klik tombol */
-let click = document.getElementById("clickSound").cloneNode();
-click.play().catch(()=>{});
-/* tampilkan konten */
+startAudio(); // background langsung start
 document.getElementById("btn").style.display="none";
 document.getElementById("konten").style.display="block";
 document.getElementById("card").classList.add("show");
 document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
-/* suara meriah */
+
+// suara meriah kembang api
 let boom = document.getElementById("boomSound").cloneNode();
 boom.play().catch(()=>{});
 ledakanMeriah();
@@ -234,10 +230,12 @@ ledakanMeriah();
 document.addEventListener("click", function(e){
 startAudio();
 if(e.target.id==="btn") return;
-/* suara tiap klik */
+
+// suara tap
 let tap = document.getElementById("tapSound").cloneNode();
 tap.play().catch(()=>{});
-/* efek visual */
+
+// efek visual
 for(let i=0;i<10;i++){
 let fire=document.createElement("div");
 fire.className="firework";
