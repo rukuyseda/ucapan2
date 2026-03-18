@@ -115,27 +115,7 @@ for(let i=0;i<100;i++){
   document.body.appendChild(star);
 }
 
-/* Web Audio API untuk tap */
-let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let audioBuffers = {};
-
-async function loadAudio(name,url){
-  const res = await fetch(url);
-  const arrayBuffer = await res.arrayBuffer();
-  audioBuffers[name] = await audioCtx.decodeAudioData(arrayBuffer);
-}
-
-function playAudio(name){
-  const source = audioCtx.createBufferSource();
-  source.buffer = audioBuffers[name];
-  source.connect(audioCtx.destination);
-  source.start(0);
-}
-
-Promise.all([
-  loadAudio('tap','tap.wav')
-]).then(()=>console.log('Tap audio loaded'));
-
+/* fungsi ledakan */
 function ledakanMeriah(){
   for(let i=0;i<30;i++){
     let fire=document.createElement("div");
@@ -147,30 +127,30 @@ function ledakanMeriah(){
   }
 }
 
+/* buka ucapan + play bg & boom langsung tanpa delay */
 function bukaUcapan(){
-  // Card show + hide tombol/hint
   document.getElementById("btn").style.display="none";
   document.getElementById("hint").style.display="none";
   document.getElementById("konten").style.display="block";
   document.getElementById("card").classList.add("show");
   document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
 
-  // play bg audio via <audio> tag (mobile friendly)
+  // play bg & boom
   const bg = document.getElementById("bgSound");
-  bg.currentTime = 0;
-  bg.play().catch(()=>{console.log('BG play blocked, wait for interaction')});
-
-  // play boom via <audio> tag supaya pasti terdengar
   const boom = document.getElementById("boomSound");
+  bg.currentTime = 0;
+  bg.play().catch(()=>{console.log('BG play blocked')});
   boom.currentTime = 0;
-  boom.play();
+  boom.play().catch(()=>{console.log('Boom play blocked')});
   ledakanMeriah();
 }
 
-// klik layar efek + suara tap
+/* tap suara instan + kembang api */
 document.addEventListener("click", function(e){
   if(e.target.id==="btn") return;
-  playAudio('tap');
+  const tap = document.getElementById("tapSound");
+  tap.currentTime = 0;
+  tap.play().catch(()=>{});
   for(let i=0;i<10;i++){
     let fire=document.createElement("div");
     fire.className="firework";
