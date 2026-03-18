@@ -36,10 +36,8 @@ body{
 
 /* awan */
 .cloud{
-  position:absolute; top:0; width:300px; height:100px;
-  background:rgba(255,255,255,0.15);
-  border-radius:50%;
-  filter:blur(25px);
+  position:absolute;top:0;width:300px;height:100px;
+  background:rgba(255,255,255,0.15);border-radius:50%;filter:blur(25px);
   animation:moveClouds linear infinite;
 }
 .cloud:nth-child(1){top:15%; left:-350px; animation-duration:100s;}
@@ -49,17 +47,13 @@ body{
 
 /* bulan */
 .moon{
-  position:absolute; top:60px; right:120px;
-  width:120px; height:120px; background:white; border-radius:50%;
-  box-shadow:0 0 40px white; z-index:1;
+  position:absolute;top:60px;right:120px;width:120px;height:120px;
+  background:white;border-radius:50%;box-shadow:0 0 40px white;z-index:1;
 }
 
 /* masjid */
 .mosque{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:260px; /* tambah tinggi supaya atap terlihat */
+  position:absolute;bottom:0;width:100%;height:240px;
   background:black;
   clip-path:polygon(0% 100%,0% 70%,10% 70%,15% 50%,20% 70%,30% 70%,35% 45%,40% 70%,50% 70%,55% 50%,60% 70%,70% 70%,75% 45%,80% 70%,90% 70%,100% 70%,100% 100%);
   z-index:3;
@@ -67,8 +61,7 @@ body{
 
 /* ketupat */
 .ketupat{
-  position:absolute;
-  width:35px;height:35px;
+  position:absolute;width:35px;height:35px;
   background:linear-gradient(45deg,#9be15d,#00e3ae);
   transform:rotate(45deg);
   animation:float 6s infinite ease-in-out;
@@ -82,43 +75,38 @@ body{
 
 /* card */
 .card{
-  background:rgba(255,255,255,0.12);
-  padding:45px;
-  border-radius:25px;
-  backdrop-filter:blur(12px);
-  box-shadow:0 0 40px rgba(0,0,0,0.4);
-  transform:scale(1);
-  transition:all 1s ease;
-  position:relative;
-  z-index:5;
+  background:rgba(255,255,255,0.12);padding:45px;border-radius:25px;
+  backdrop-filter:blur(12px);box-shadow:0 0 40px rgba(0,0,0,0.4);
+  transform:scale(1);transition:all 1s ease;position:relative;z-index:5;
 }
 .card.show{transform:scale(1.05);}
 
-/* tombol */
 button{
-  position:relative;
-  padding:14px 35px;
-  font-size:18px;
-  border:none;
-  border-radius:30px;
+  padding:14px 35px;font-size:18px;border:none;border-radius:30px;
   background:linear-gradient(45deg,#FFD700,#fff3a0);
   cursor:pointer;
   animation:pulse 2s infinite;
-  overflow:hidden;
+  position:relative;overflow:hidden;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 10px gold;}
+  50%{box-shadow:0 0 25px gold;}
+  100%{box-shadow:0 0 10px gold;}
 }
 button::before{
   content:"";
-  position:absolute;
-  top:0; left:-75%;
-  width:50%; height:100%;
+  position:absolute;top:0;left:-75%;
+  width:50%;height:100%;
   background:rgba(255,255,255,0.5);
   transform:skewX(-25deg);
   animation:shine 3s infinite;
-  pointer-events: none; /* ini penting supaya tombol tetap bisa diklik */
 }
-@keyframes pulse{0%{box-shadow:0 0 10px gold;}50%{box-shadow:0 0 25px gold;}100%{box-shadow:0 0 10px gold;}}
-@keyframes shine{0%{left:-75%;}100%{left:125%;}}
+@keyframes shine{
+  0%{left:-75%;}
+  100%{left:125%;}
+}
 
+/* konten */
 #konten{display:none;}
 .fade-up{opacity:0; transform:translateY(30px);}
 .fade-up.show{animation:fadeUp 1s forwards;}
@@ -127,12 +115,10 @@ button::before{
 .delay2{animation-delay:0.6s;}
 .delay3{animation-delay:1s;}
 
-/* teks bersinar */
 .glow-text{
   background:linear-gradient(90deg,#fff,#FFD700,#fff);
   background-size:200%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   animation:shineText 3s linear infinite;
   text-shadow:0 0 5px rgba(255,255,255,0.8),
               0 0 10px rgba(255,215,0,0.8),
@@ -141,26 +127,29 @@ button::before{
 @keyframes shineText{0%{background-position:0%}100%{background-position:200%;}}
 
 /* kembang api */
-.firework{
-  position:absolute; width:6px; height:6px; border-radius:50%;
-  animation:explode 1.5s ease-out forwards;
-}
+.firework{position:absolute;width:6px;height:6px;border-radius:50%;animation:explode 1.5s ease-out forwards;}
 @keyframes explode{0%{transform:scale(0);opacity:1;}100%{transform:scale(20);opacity:0;}}
 
 /* hint klik */
 #hint{
-  position:fixed;
-  bottom:15px;
-  right:15px;
-  font-size:14px;
-  padding:8px 12px;
-  background:rgba(255,255,255,0.1);
-  border-radius:12px;
-  color:#fff;
-  font-weight:bold;
-  text-shadow:0 0 5px rgba(255,255,255,0.7);
-  z-index:999;
-  pointer-events:none;
+  position:fixed;bottom:15px;right:15px;font-size:14px;
+  padding:8px 12px;background:rgba(255,255,255,0.1);
+  border-radius:12px;color:#fff;font-weight:bold;text-shadow:0 0 5px rgba(255,255,255,0.7);
+  z-index:999;pointer-events:none;
+}
+
+/* efek melayang isi ucapan */
+.float-text{
+  display:inline-block;
+  animation:floatText 8s ease-in-out infinite alternate;
+  position:relative;
+}
+@keyframes floatText{
+  0%{transform:translate(0px,0px);}
+  25%{transform:translate(5px,-5px);}
+  50%{transform:translate(-5px,5px);}
+  75%{transform:translate(5px,3px);}
+  100%{transform:translate(-3px,-3px);}
 }
 </style>
 </head>
@@ -187,9 +176,9 @@ button::before{
 <div class="card" id="card">
   <button id="btn" onclick="bukaUcapan()">Buka Ucapan</button>
   <div id="konten">
-    <h1 class="fade-up delay1 glow-text">🌙 Selamat Hari Raya</h1>
-    <h2 class="fade-up delay2 glow-text">Idul Fitri 1447 H</h2>
-    <div class="fade-up delay3 glow-text">
+    <h1 class="fade-up delay1 glow-text float-text">🌙 Selamat Hari Raya</h1>
+    <h2 class="fade-up delay2 glow-text float-text">Idul Fitri 1447 H</h2>
+    <div class="fade-up delay3 glow-text float-text">
       ✨ Taqabbalallahu minna wa minkum ✨<br><br>
       Semoga di hari yang suci ini kita kembali fitri,<br>
       dipenuhi kebahagiaan, keberkahan,<br>
@@ -207,9 +196,30 @@ for(let i=0;i<100;i++){
   star.className="star";
   star.style.left=Math.random()*100+"%";
   star.style.top=Math.random()*100+"%";
-  star.style.animationDuration=(Math.random()*2+1)+"s"; // buat kerlap kerlip nggak barengan
+  star.style.animationDuration=(Math.random()*2+1)+"s"; // beda-beda
   document.body.appendChild(star);
 }
+
+// audio preload
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioBuffers = {};
+async function loadAudio(name,url){
+  const res = await fetch(url);
+  const arrayBuffer = await res.arrayBuffer();
+  audioBuffers[name]=await audioCtx.decodeAudioData(arrayBuffer);
+}
+function playAudio(name,loop=false){
+  const source = audioCtx.createBufferSource();
+  source.buffer = audioBuffers[name];
+  source.loop = loop;
+  source.connect(audioCtx.destination);
+  source.start(0);
+  return source;
+}
+Promise.all([
+  loadAudio('boom','boom.wav'),
+  loadAudio('tap','tap.wav')
+]).then(()=>console.log('Audio loaded'));
 
 // kembang api
 function ledakanMeriah(){
@@ -223,7 +233,6 @@ function ledakanMeriah(){
   }
 }
 
-// buka ucapan
 let bgPlayed=false;
 function bukaUcapan(){
   document.getElementById("btn").style.display="none";
@@ -232,27 +241,24 @@ function bukaUcapan(){
   document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
   document.getElementById("hint").style.display="none";
 
-  // bg via audio tag
+  // play bg audio via tag
   if(!bgPlayed){
     const bg = document.getElementById("bgSound");
-    bg.currentTime = 0;
-    bg.play().catch(()=>console.log('BG play blocked'));
-    bgPlayed = true;
+    bg.currentTime=0;
+    bg.play().catch(()=>{console.log('BG play blocked')});
+    bgPlayed=true;
   }
 
-  // kembang api + suara boom
-  document.getElementById("boomSound").currentTime=0;
-  document.getElementById("boomSound").play().catch(()=>console.log('Boom blocked'));
+  // kembang api
+  playAudio('boom');
   ledakanMeriah();
 }
 
 // klik layar efek + suara tap
 document.addEventListener("click", function(e){
   if(e.target.id==="btn") return;
-  const tap = document.getElementById("tapSound");
-  tap.currentTime=0;
-  tap.play().catch(()=>console.log('Tap blocked'));
-
+  document.getElementById("hint").style.display="none";
+  playAudio('tap');
   for(let i=0;i<10;i++){
     let fire=document.createElement("div");
     fire.className="firework";
@@ -263,6 +269,5 @@ document.addEventListener("click", function(e){
   }
 });
 </script>
-
 </body>
 </html>
