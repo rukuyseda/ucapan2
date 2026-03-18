@@ -25,13 +25,13 @@ position:relative;
   height:3px;
   background:white;
   border-radius:50%;
-  box-shadow:0 0 6px white, 0 0 12px white;
+  box-shadow:0 0 6px white,0 0 12px white;
   animation:twinkle 1.5s infinite alternate;
 }
 @keyframes twinkle{
-  0% {opacity:0.2; transform:scale(0.7);}
-  50% {opacity:1; transform:scale(1.2);}
-  100% {opacity:0.3; transform:scale(1);}
+0% {opacity:0.2; transform:scale(0.7);}
+50% {opacity:1; transform:scale(1.2);}
+100% {opacity:0.3; transform:scale(1);}
 }
 /* awan */
 .cloud{
@@ -149,11 +149,11 @@ animation:explode 1.5s ease-out forwards;
 </head>
 <body>
 
-<!-- 🎧 4 AUDIO -->
-<audio id="bgSound" src="bg.mp3" loop></audio>
-<audio id="clickSound" src="click.mp3"></audio>
-<audio id="boomSound" src="boom.mp3"></audio>
-<audio id="tapSound" src="tap.mp3"></audio>
+<!-- 4 AUDIO dengan preload -->
+<audio id="bgSound" src="bg.mp3" preload="auto" loop></audio>
+<audio id="clickSound" src="click.mp3" preload="auto"></audio>
+<audio id="boomSound" src="boom.mp3" preload="auto"></audio>
+<audio id="tapSound" src="tap.mp3" preload="auto"></audio>
 
 <!-- awan -->
 <div class="cloud"></div>
@@ -169,7 +169,6 @@ animation:explode 1.5s ease-out forwards;
 
 <div class="card" id="card">
 <button id="btn" onclick="bukaUcapan()">Buka Ucapan</button>
-
 <div id="konten">
 <h1 class="fade-up delay1 glow-text">🌙 Selamat Hari Raya</h1>
 <h2 class="fade-up delay2 glow-text">Idul Fitri 1447 H</h2>
@@ -184,12 +183,15 @@ dan silaturahmi yang indah.
 
 <script>
 let audioStarted = false;
-function startAudio(){
+function startAudio(){ // background play anti delay
 if(!audioStarted){
-document.getElementById("bgSound").play().catch(()=>{});
+let bg = document.getElementById("bgSound");
+bg.volume = 0.4;
+bg.play().catch(()=>{}); // kalau browser block autoplay
 audioStarted = true;
 }
 }
+
 /* bintang */
 for(let i=0;i<100;i++){
 let star=document.createElement("div");
@@ -198,6 +200,7 @@ star.style.left=Math.random()*100+"%";
 star.style.top=Math.random()*100+"%";
 document.body.appendChild(star);
 }
+
 /* kembang api */
 function ledakanMeriah(){
 for(let i=0;i<30;i++){
@@ -209,6 +212,7 @@ fire.style.background=`hsl(${Math.random()*360},100%,50%)`;
 document.body.appendChild(fire);
 }
 }
+
 /* tombol buka ucapan */
 function bukaUcapan(){
 startAudio();
@@ -220,12 +224,13 @@ document.getElementById("btn").style.display="none";
 document.getElementById("konten").style.display="block";
 document.getElementById("card").classList.add("show");
 document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
-/* suara meriah pas ucapan muncul */
+/* suara meriah */
 let boom = document.getElementById("boomSound").cloneNode();
 boom.play().catch(()=>{});
 ledakanMeriah();
 }
-/* klik layar efek & suara tap */
+
+/* klik layar efek & suara */
 document.addEventListener("click", function(e){
 startAudio();
 if(e.target.id==="btn") return;
@@ -243,6 +248,5 @@ document.body.appendChild(fire);
 }
 });
 </script>
-
 </body>
 </html>
