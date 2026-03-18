@@ -71,7 +71,7 @@ button{padding:14px 35px;font-size:18px;border:none;border-radius:30px;backgroun
 </head>
 <body>
 
-<!-- audio bg pakai tag biasa supaya mobile play pasti -->
+<!-- audios -->
 <audio id="bgSound" src="bg.wav" preload="auto" loop></audio>
 <audio id="boomSound" src="boom.wav" preload="auto"></audio>
 <audio id="tapSound" src="tap.wav" preload="auto"></audio>
@@ -115,7 +115,7 @@ for(let i=0;i<100;i++){
   document.body.appendChild(star);
 }
 
-/* Web Audio API untuk tap & boom */
+/* Web Audio API untuk tap */
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let audioBuffers = {};
 
@@ -133,9 +133,8 @@ function playAudio(name){
 }
 
 Promise.all([
-  loadAudio('boom','boom.wav'),
   loadAudio('tap','tap.wav')
-]).then(()=>console.log('Audio loaded'));
+]).then(()=>console.log('Tap audio loaded'));
 
 function ledakanMeriah(){
   for(let i=0;i<30;i++){
@@ -149,20 +148,21 @@ function ledakanMeriah(){
 }
 
 function bukaUcapan(){
+  // Card show + hide tombol/hint
   document.getElementById("btn").style.display="none";
   document.getElementById("hint").style.display="none";
   document.getElementById("konten").style.display="block";
   document.getElementById("card").classList.add("show");
   document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
 
-  // play bg audio pakai <audio> supaya pasti di mobile
-  let bg = document.getElementById("bgSound");
+  // play bg audio via <audio> tag (mobile friendly)
+  const bg = document.getElementById("bgSound");
   bg.currentTime = 0;
-  bg.play();
+  bg.play().catch(()=>{console.log('BG play blocked, wait for interaction')});
 
-  // kembang api
-  let boom = document.getElementById("boomSound");
-  boom.currentTime=0;
+  // play boom via <audio> tag supaya pasti terdengar
+  const boom = document.getElementById("boomSound");
+  boom.currentTime = 0;
   boom.play();
   ledakanMeriah();
 }
