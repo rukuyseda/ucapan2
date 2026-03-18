@@ -138,18 +138,19 @@ button::before{
   z-index:999;pointer-events:none;
 }
 
-/* efek melayang isi ucapan */
+/* efek melayang isi ucapan lebih terlihat */
 .float-text{
   display:inline-block;
-  animation:floatText 8s ease-in-out infinite alternate;
   position:relative;
+  animation:floatText 12s ease-in-out infinite alternate;
 }
 @keyframes floatText{
   0%{transform:translate(0px,0px);}
-  25%{transform:translate(5px,-5px);}
-  50%{transform:translate(-5px,5px);}
-  75%{transform:translate(5px,3px);}
-  100%{transform:translate(-3px,-3px);}
+  20%{transform:translate(8px,-6px);}
+  40%{transform:translate(-6px,8px);}
+  60%{transform:translate(5px,-4px);}
+  80%{transform:translate(-7px,6px);}
+  100%{transform:translate(4px,-5px);}
 }
 </style>
 </head>
@@ -200,7 +201,7 @@ for(let i=0;i<100;i++){
   document.body.appendChild(star);
 }
 
-// audio preload
+// Web Audio API preload tap + boom
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let audioBuffers = {};
 async function loadAudio(name,url){
