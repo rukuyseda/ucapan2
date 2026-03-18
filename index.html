@@ -20,7 +20,7 @@ text-align:center;
 position:relative;
 }
 
-/* bintang multi-layer */
+/* bintang */
 .star{
 position:absolute;
 border-radius:50%;
@@ -111,8 +111,6 @@ border:none;
 border-radius:30px;
 background:linear-gradient(45deg,#FFD700,#fff3a0);
 cursor:pointer;
-position:relative;
-overflow:hidden;
 animation:pulse 2s infinite;
 }
 @keyframes pulse{
@@ -152,10 +150,9 @@ animation:explode 1.5s ease-out forwards;
 
 <body>
 
-<!-- AUDIO ONLINE -->
-<audio id="bgSound" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946f06e0a4.mp3?filename=ramadan-background-124007.mp3" loop></audio>
-
-<audio id="boomSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c3c8a9bb6f.mp3?filename=firework-explosion-1-6959.mp3"></audio>
+<!-- AUDIO ONLINE (PIXABAY) -->
+<audio id="bgSound" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946f06e0a4.mp3" loop></audio>
+<audio id="boomSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c3c8a9bb6f.mp3"></audio>
 
 <!-- awan -->
 <div class="cloud layer1"></div>
@@ -186,6 +183,19 @@ dan silaturahmi yang indah.
 </div>
 
 <script>
+let audioStarted = false;
+
+/* start audio fix */
+function startAudio(){
+if(!audioStarted){
+let bg = document.getElementById("bgSound");
+bg.volume = 0.4;
+bg.play().catch(()=>{});
+audioStarted = true;
+}
+}
+
+/* bintang */
 function createStars(num, layer){
 for(let i=0;i<num;i++){
 let star=document.createElement("div");
@@ -199,6 +209,7 @@ createStars(50,1);
 createStars(30,2);
 createStars(20,3);
 
+/* efek */
 function ledakanMeriah(){
 for(let i=0;i<25;i++){
 let fire=document.createElement("div");
@@ -210,23 +221,26 @@ document.body.appendChild(fire);
 }
 }
 
+/* buka ucapan */
 function bukaUcapan(){
+startAudio();
+
 document.getElementById("btn").style.display="none";
 document.getElementById("konten").style.display="block";
 document.getElementById("card").classList.add("show");
 
-/* mainkan suara */
-document.getElementById("bgSound").play();
-
 ledakanMeriah();
 }
 
+/* klik bebas */
 document.addEventListener("click", function(e){
+startAudio();
+
 if(e.target.id==="btn") return;
 
 let boom=document.getElementById("boomSound");
 boom.currentTime=0;
-boom.play();
+boom.play().catch(()=>{});
 
 for(let i=0;i<10;i++){
 let fire=document.createElement("div");
