@@ -138,7 +138,7 @@ button::before{
   z-index:999;pointer-events:none;
 }
 
-/* efek melayang isi ucapan lebih terlihat */
+/* efek melayang isi ucapan setengah ketupat */
 .float-text{
   display:inline-block;
   position:relative;
@@ -146,11 +146,11 @@ button::before{
 }
 @keyframes floatText{
   0%{transform:translate(0px,0px);}
-  20%{transform:translate(8px,-6px);}
-  40%{transform:translate(-6px,8px);}
-  60%{transform:translate(5px,-4px);}
-  80%{transform:translate(-7px,6px);}
-  100%{transform:translate(4px,-5px);}
+  20%{transform:translate(5px,-10px);}
+  40%{transform:translate(-5px,10px);}
+  60%{transform:translate(7px,-8px);}
+  80%{transform:translate(-6px,6px);}
+  100%{transform:translate(4px,-7px);}
 }
 </style>
 </head>
@@ -197,7 +197,7 @@ for(let i=0;i<100;i++){
   star.className="star";
   star.style.left=Math.random()*100+"%";
   star.style.top=Math.random()*100+"%";
-  star.style.animationDuration=(Math.random()*2+1)+"s"; // beda-beda
+  star.style.animationDuration=(Math.random()*2+1)+"s";
   document.body.appendChild(star);
 }
 
