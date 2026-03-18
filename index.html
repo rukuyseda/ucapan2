@@ -200,14 +200,6 @@ dan silaturahmi yang indah.
 
 <script>
 let audioStarted = false;
-function startAudio(){ 
-if(!audioStarted){
-let bg = document.getElementById("bgSound");
-bg.volume = 0.4;
-bg.play().catch(()=>{}); 
-audioStarted = true;
-}
-}
 
 /* bintang */
 for(let i=0;i<100;i++){
@@ -232,7 +224,13 @@ document.body.appendChild(fire);
 
 /* tombol buka ucapan */
 function bukaUcapan(){
-startAudio();
+if(!audioStarted){
+let bg = document.getElementById("bgSound");
+bg.volume = 0.4;
+bg.play().catch(()=>{}); 
+audioStarted = true;
+}
+
 document.getElementById("btn").style.display="none";
 document.getElementById("konten").style.display="block";
 document.getElementById("card").classList.add("show");
@@ -246,7 +244,6 @@ ledakanMeriah();
 
 /* klik layar efek & suara */
 document.addEventListener("click", function(e){
-startAudio();
 if(e.target.id==="btn") return;
 
 // suara tap
@@ -261,7 +258,6 @@ fire.style.left=e.clientX+"px";
 fire.style.top=e.clientY+"px";
 fire.style.background=`hsl(${Math.random()*360},100%,50%)`;
 document.body.appendChild(fire);
-}
 });
 </script>
 </body>
