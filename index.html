@@ -49,8 +49,8 @@ body{
 @keyframes float{0%{transform:translateY(0) rotate(45deg);}50%{transform:translateY(-20px) rotate(45deg);}100%{transform:translateY(0) rotate(45deg);}}
 
 /* card */
-.card{background:rgba(255,255,255,0.12);padding:45px;border-radius:25px;backdrop-filter:blur(12px);box-shadow:0 0 40px rgba(0,0,0,0.4);transform:scale(1.2);transition:all 1s ease;z-index:5;}
-.card.show{transform:scale(1);}
+.card{background:rgba(255,255,255,0.12);padding:45px;border-radius:25px;backdrop-filter:blur(12px);box-shadow:0 0 40px rgba(0,0,0,0.4);transform:scale(1);transition:all 1s ease;position:relative;z-index:5;}
+.card.show{transform:scale(1.05);}
 button{padding:14px 35px;font-size:18px;border:none;border-radius:30px;background:linear-gradient(45deg,#FFD700,#fff3a0);cursor:pointer;animation:pulse 2s infinite;}
 @keyframes pulse{0%{box-shadow:0 0 10px gold;}50%{box-shadow:0 0 25px gold;}100%{box-shadow:0 0 10px gold;}}
 #konten{display:none;}
@@ -71,7 +71,7 @@ button{padding:14px 35px;font-size:18px;border:none;border-radius:30px;backgroun
 </head>
 <body>
 
-<!-- audios -->
+<!-- audio bg pakai tag biasa supaya mobile play pasti -->
 <audio id="bgSound" src="bg.wav" preload="auto" loop></audio>
 <audio id="boomSound" src="boom.wav" preload="auto"></audio>
 <audio id="tapSound" src="tap.wav" preload="auto"></audio>
@@ -106,32 +106,6 @@ dan silaturahmi yang indah.
 <div id="hint">Klik dimana saja!</div>
 
 <script>
-let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let audioBuffers = {};
-let bgSource = null;
-
-// load WAV ke memory
-async function loadAudio(name,url){
-  const res = await fetch(url);
-  const arrayBuffer = await res.arrayBuffer();
-  audioBuffers[name] = await audioCtx.decodeAudioData(arrayBuffer);
-}
-function playAudio(name, loop=false){
-  const source = audioCtx.createBufferSource();
-  source.buffer = audioBuffers[name];
-  source.loop = loop;
-  source.connect(audioCtx.destination);
-  source.start(0);
-  return source;
-}
-
-// load semua audio
-Promise.all([
-  loadAudio('bg','bg.wav'),
-  loadAudio('boom','boom.wav'),
-  loadAudio('tap','tap.wav')
-]).then(()=>console.log('Audio loaded'));
-
 /* bintang */
 for(let i=0;i<100;i++){
   let star=document.createElement("div");
@@ -140,6 +114,28 @@ for(let i=0;i<100;i++){
   star.style.top=Math.random()*100+"%";
   document.body.appendChild(star);
 }
+
+/* Web Audio API untuk tap & boom */
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioBuffers = {};
+
+async function loadAudio(name,url){
+  const res = await fetch(url);
+  const arrayBuffer = await res.arrayBuffer();
+  audioBuffers[name] = await audioCtx.decodeAudioData(arrayBuffer);
+}
+
+function playAudio(name){
+  const source = audioCtx.createBufferSource();
+  source.buffer = audioBuffers[name];
+  source.connect(audioCtx.destination);
+  source.start(0);
+}
+
+Promise.all([
+  loadAudio('boom','boom.wav'),
+  loadAudio('tap','tap.wav')
+]).then(()=>console.log('Audio loaded'));
 
 function ledakanMeriah(){
   for(let i=0;i<30;i++){
@@ -153,23 +149,22 @@ function ledakanMeriah(){
 }
 
 function bukaUcapan(){
-  // unlock audioContext
-  audioCtx.resume().then(()=>{
-    // hide tombol & hint
-    document.getElementById("btn").style.display="none";
-    document.getElementById("hint").style.display="none";
-    document.getElementById("konten").style.display="block";
-    document.getElementById("card").classList.add("show");
+  document.getElementById("btn").style.display="none";
+  document.getElementById("hint").style.display="none";
+  document.getElementById("konten").style.display="block";
+  document.getElementById("card").classList.add("show");
+  document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
 
-    document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
+  // play bg audio pakai <audio> supaya pasti di mobile
+  let bg = document.getElementById("bgSound");
+  bg.currentTime = 0;
+  bg.play();
 
-    // play bg music
-    if(!bgSource) bgSource = playAudio('bg',true);
-
-    // kembang api + suara boom
-    playAudio('boom');
-    ledakanMeriah();
-  });
+  // kembang api
+  let boom = document.getElementById("boomSound");
+  boom.currentTime=0;
+  boom.play();
+  ledakanMeriah();
 }
 
 // klik layar efek + suara tap
