@@ -31,26 +31,14 @@ body{
 @keyframes moveClouds{0%{transform:translateX(0);}100%{transform:translateX(150vw);}}
 
 /* bulan */
-.moon{position:absolute;top:60px;right:120px;width:120px;height:120px;background:white;border-radius:50%;box-shadow:0 0 40px white;z-index:1;}
-
-/* masjid (atap) */
-.mosque{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:120px;
-  background:black;
-  clip-path:polygon(0% 100%,0% 70%,10% 70%,15% 50%,20% 70%,30% 70%,35% 45%,40% 70%,50% 70%,55% 50%,60% 70%,70% 70%,75% 45%,80% 70%,90% 70%,100% 70%,100% 100%);
-  z-index:2;
-}
-
-/* ketupat */
+.moon{position:absolute;top:60px;right:120px;width:120px;height:120px;background:white;border-radius:50%;box-shadow:0 0 40px white;}
+/* masjid */
+.mosque{position:absolute;bottom:0;width:100%;height:120px;background:black;clip-path:polygon(0% 100%,0% 70%,10% 70%,15% 50%,20% 70%,30% 70%,35% 45%,40% 70%,50% 70%,55% 50%,60% 70%,70% 70%,75% 45%,80% 70%,90% 70%,100% 70%,100% 100%);}
 .ketupat{position:absolute;width:35px;height:35px;background:linear-gradient(45deg,#9be15d,#00e3ae);transform:rotate(45deg);animation:float 6s infinite ease-in-out;}
 @keyframes float{0%{transform:translateY(0) rotate(45deg);}50%{transform:translateY(-20px) rotate(45deg);}100%{transform:translateY(0) rotate(45deg);}}
 
-/* card */
-.card{background:rgba(255,255,255,0.12);padding:45px;border-radius:25px;backdrop-filter:blur(12px);box-shadow:0 0 40px rgba(0,0,0,0.4);transform:scale(1);transition:all 1s ease;position:relative;z-index:5;}
-.card.show{transform:scale(1.05);}
+.card{background:rgba(255,255,255,0.12);padding:45px;border-radius:25px;backdrop-filter:blur(12px);box-shadow:0 0 40px rgba(0,0,0,0.4);transform:scale(1.2);transition:all 1s ease;}
+.card.show{transform:scale(1);}
 button{padding:14px 35px;font-size:18px;border:none;border-radius:30px;background:linear-gradient(45deg,#FFD700,#fff3a0);cursor:pointer;animation:pulse 2s infinite;}
 @keyframes pulse{0%{box-shadow:0 0 10px gold;}50%{box-shadow:0 0 25px gold;}100%{box-shadow:0 0 10px gold;}}
 #konten{display:none;}
@@ -64,31 +52,11 @@ button{padding:14px 35px;font-size:18px;border:none;border-radius:30px;backgroun
 @keyframes shineText{0%{background-position:0%}100%{background-position:200%;}}
 .firework{position:absolute;width:6px;height:6px;border-radius:50%;animation:explode 1.5s ease-out forwards;}
 @keyframes explode{0%{transform:scale(0);opacity:1;}100%{transform:scale(20);opacity:0;}}
-
-/* hint klik */
-#hint{position:fixed;bottom:15px;right:15px;font-size:14px;padding:8px 12px;background:rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-weight:bold;text-shadow:0 0 5px rgba(255,255,255,0.7);z-index:999;pointer-events:none;}
 </style>
 </head>
 <body>
 
-<!-- audios -->
-<audio id="bgSound" src="bg.wav" preload="auto" loop></audio>
-<audio id="boomSound" src="boom.wav" preload="auto"></audio>
-<audio id="tapSound" src="tap.wav" preload="auto"></audio>
-
-<!-- awan -->
-<div class="cloud"></div>
-<div class="cloud"></div>
-<div class="cloud"></div>
-
-<div class="moon"></div>
-<div class="mosque"></div>
-
-<div class="ketupat" style="left:10%;top:30%"></div>
-<div class="ketupat" style="left:85%;top:60%"></div>
-<div class="ketupat" style="left:25%;top:75%"></div>
-
-<!-- card -->
+<!-- card & konten -->
 <div class="card" id="card">
 <button id="btn" onclick="bukaUcapan()">Buka Ucapan</button>
 <div id="konten">
@@ -103,10 +71,8 @@ dan silaturahmi yang indah.
 </div>
 </div>
 
-<div id="hint">Klik dimana saja!</div>
-
+<!-- bintang -->
 <script>
-/* bintang */
 for(let i=0;i<100;i++){
   let star=document.createElement("div");
   star.className="star";
@@ -114,8 +80,35 @@ for(let i=0;i<100;i++){
   star.style.top=Math.random()*100+"%";
   document.body.appendChild(star);
 }
+</script>
 
-/* fungsi ledakan */
+<script>
+// Web Audio API setup
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioBuffers = {};
+
+async function loadAudio(name, url){
+  const res = await fetch(url);
+  const arrayBuffer = await res.arrayBuffer();
+  audioBuffers[name] = await audioCtx.decodeAudioData(arrayBuffer);
+}
+
+function playAudio(name, loop=false){
+  const source = audioCtx.createBufferSource();
+  source.buffer = audioBuffers[name];
+  source.loop = loop;
+  source.connect(audioCtx.destination);
+  source.start(0);
+  return source;
+}
+
+// load semua audio WAV
+Promise.all([
+  loadAudio('bg','bg.wav'),
+  loadAudio('boom','boom.wav'),
+  loadAudio('tap','tap.wav')
+]).then(()=>console.log('Audio loaded'));
+
 function ledakanMeriah(){
   for(let i=0;i<30;i++){
     let fire=document.createElement("div");
@@ -127,30 +120,28 @@ function ledakanMeriah(){
   }
 }
 
-/* buka ucapan + play bg & boom langsung tanpa delay */
+let bgSource;
 function bukaUcapan(){
+  // hide tombol
   document.getElementById("btn").style.display="none";
-  document.getElementById("hint").style.display="none";
   document.getElementById("konten").style.display="block";
   document.getElementById("card").classList.add("show");
   document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
 
-  // play bg & boom
-  const bg = document.getElementById("bgSound");
-  const boom = document.getElementById("boomSound");
-  bg.currentTime = 0;
-  bg.play().catch(()=>{console.log('BG play blocked')});
-  boom.currentTime = 0;
-  boom.play().catch(()=>{console.log('Boom play blocked')});
+  // play bg music
+  if(!bgSource){
+    bgSource = playAudio('bg', true);
+  }
+
+  // play kembang api
+  playAudio('boom');
   ledakanMeriah();
 }
 
-/* tap suara instan + kembang api */
+// klik layar efek + suara tap
 document.addEventListener("click", function(e){
   if(e.target.id==="btn") return;
-  const tap = document.getElementById("tapSound");
-  tap.currentTime = 0;
-  tap.play().catch(()=>{});
+  playAudio('tap');
   for(let i=0;i<10;i++){
     let fire=document.createElement("div");
     fire.className="firework";
