@@ -162,16 +162,19 @@ for(let i=0;i<100;i++){
   document.body.appendChild(star);
 }
 
-// Web Audio API setup
-let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+// Web Audio API
+let audioCtx;
 let audioBuffers = {};
-let bgBuffer, bgSource;
+let bgSource;
 
-// preload semua audio
+// preload WAV
 async function loadAudio(name, url){
   const res = await fetch(url);
   const arrayBuffer = await res.arrayBuffer();
-  audioBuffers[name] = await audioCtx.decodeAudioData(arrayBuffer);
+  // decode menggunakan temporary AudioContext supaya siap
+  const tempCtx = new (window.AudioContext || window.webkitAudioContext)();
+  audioBuffers[name] = await tempCtx.decodeAudioData(arrayBuffer);
+  tempCtx.close();
 }
 Promise.all([
   loadAudio('bg','bg.wav'),
@@ -179,8 +182,9 @@ Promise.all([
   loadAudio('tap','tap.wav')
 ]).then(()=>console.log('Audio loaded'));
 
-// play audio short (boom/tap)
+// play audio pendek
 function playAudio(name){
+  if(!audioCtx) return;
   const source = audioCtx.createBufferSource();
   source.buffer = audioBuffers[name];
   source.connect(audioCtx.destination);
@@ -200,7 +204,7 @@ function ledakanMeriah(){
   }
 }
 
-// buka ucapan + bg
+// buka ucapan
 document.getElementById("btn").addEventListener("click", ()=>{
   document.getElementById("btn").style.display="none";
   document.getElementById("konten").style.display="block";
@@ -208,7 +212,12 @@ document.getElementById("btn").addEventListener("click", ()=>{
   document.querySelectorAll(".fade-up").forEach(el=>el.classList.add("show"));
   document.getElementById("hint").style.display="none";
 
-  // play bg WAV via Web Audio API (iOS-ready)
+  // buat AudioContext **di sini** → iOS & Android siap
+  if(!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  // play bg loop
   if(!bgSource){
     bgSource = audioCtx.createBufferSource();
     bgSource.buffer = audioBuffers['bg'];
@@ -217,14 +226,14 @@ document.getElementById("btn").addEventListener("click", ()=>{
     bgSource.start(0);
   }
 
-  playAudio('boom'); // kembang api
+  playAudio('boom');
   ledakanMeriah();
 });
 
 // klik layar efek + suara tap
 document.addEventListener("click", function(e){
   if(e.target.id==="btn") return;
-  playAudio('tap');
+  if(audioCtx) playAudio('tap');
   for(let i=0;i<10;i++){
     let fire=document.createElement("div");
     fire.className="firework";
